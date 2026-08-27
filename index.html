@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI-Powered Phishing URL Detection using Finite Automata</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <div class="nav-brand">
+      <span class="brand-mark">λ</span>
+      <div class="brand-text">
+        <span class="brand-title">PHISH<span class="accent">//</span>DFA</span>
+        <span class="brand-sub">CSA1407 · Theory of Computation</span>
+      </div>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#analyzer">URL Analyzer</a></li>
+      <li><a href="#automata">Finite Automata</a></li>
+      <li><a href="#how-it-works">How It Works</a></li>
+      <li><a href="#examples">Examples</a></li>
+      <li><a href="#about">About</a></li>
+    </ul>
+    <a href="#analyzer" class="nav-cta">Analyze URL</a>
+  </div>
+</nav>
+
+<!-- ============ HOME / HERO ============ -->
+<header class="hero" id="home">
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-tag">
+      <span class="dot"></span> LIVE PATTERN-RECOGNITION DEMO
+    </div>
+    <h1 class="hero-title">
+      AI-Powered<br>
+      Phishing URL <span class="accent-text">Detection</span><br>
+      using Finite Automata
+    </h1>
+    <p class="hero-sub">Detect suspicious URLs using Artificial Intelligence and Finite Automata.</p>
+
+    <div class="hero-scan" aria-hidden="true">
+      <span class="scan-label">q0</span>
+      <div class="scan-track">
+        <span class="scan-string" id="heroScanString">https://secure-login-verify-account.xyz/update</span>
+        <span class="scan-cursor" id="heroCursor"></span>
+      </div>
+      <span class="scan-label" id="heroStateLabel">READING</span>
+    </div>
+
+    <form class="hero-form" id="heroForm" autocomplete="off">
+      <input type="text" id="urlInput" class="url-input" placeholder="Enter a URL to analyze..." aria-label="URL to analyze">
+      <button type="submit" class="btn-primary">
+        <span>Analyze URL</span>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </form>
+
+    <div class="hero-examples">
+      <span class="examples-label">Try:</span>
+      <button class="chip" data-url="https://www.google.com">google.com</button>
+      <button class="chip" data-url="https://example.com">example.com</button>
+      <button class="chip chip-danger" data-url="http://login-bank-verify.com">login-bank-verify.com</button>
+      <button class="chip chip-danger" data-url="http://secure-account-login.xyz">secure-account-login.xyz</button>
+    </div>
+  </div>
+</header>
+
+<!-- ============ URL ANALYSIS ============ -->
+<section class="section" id="analyzer">
+  <div class="section-inner">
+    <div class="section-head">
+      <span class="eyebrow">02 · Feature Extraction</span>
+      <h2>URL Analysis</h2>
+      <p>Every URL is decomposed into measurable features before it ever reaches the automaton.</p>
+    </div>
+
+    <div id="analysisEmpty" class="empty-state">
+      <div class="empty-icon">◈</div>
+      <p>No URL analyzed yet. Enter a URL above and press <strong>Analyze URL</strong> to see its extracted feature set.</p>
+    </div>
+
+    <div id="analysisResults" class="analysis-wrap hidden">
+      <div class="analyzed-url" id="analyzedUrlDisplay"></div>
+      <div class="feature-grid" id="featureGrid"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FINITE AUTOMATA SIMULATION ============ -->
+<section class="section section-alt" id="automata">
+  <div class="section-inner">
+    <div class="section-head">
+      <span class="eyebrow">03 · State Machine</span>
+      <h2>Finite Automata Processing</h2>
+      <p>The finite automaton reads the URL as a sequence of characters and changes states according to predefined transition rules. Suspicious patterns cause the automaton to enter suspicious states.</p>
+    </div>
+
+    <div class="fa-diagram" id="faDiagram">
+      <svg id="faSvg" viewBox="0 0 980 260" xmlns="http://www.w3.org/2000/svg">
+        <!-- transition paths -->
+        <path id="path-q0-q1" class="fa-edge" d="M 110 130 L 290 130" />
+        <path id="path-q1-q2" class="fa-edge" d="M 370 130 L 550 130" />
+        <path id="path-q2-q3" class="fa-edge" d="M 630 130 L 810 130" />
+        <path id="path-q3-q4" class="fa-edge" d="M 890 130 L 890 130" />
+
+        <!-- states -->
+        <g class="fa-state" id="state-q0" data-state="q0">
+          <circle cx="70" cy="130" r="40"/>
+          <text x="70" y="125">q0</text>
+          <text x="70" y="145" class="fa-substate">start</text>
+        </g>
+        <g class="fa-state" id="state-q1" data-state="q1">
+          <circle cx="330" cy="130" r="40"/>
+          <text x="330" y="125">q1</text>
+          <text x="330" y="145" class="fa-substate">reading</text>
+        </g>
+        <g class="fa-state" id="state-q2" data-state="q2">
+          <circle cx="590" cy="130" r="40"/>
+          <text x="590" y="125">q2</text>
+          <text x="590" y="145" class="fa-substate">pattern</text>
+        </g>
+        <g class="fa-state" id="state-q3" data-state="q3">
+          <circle cx="850" cy="130" r="40"/>
+          <text x="850" y="125">q3</text>
+          <text x="850" y="145" class="fa-substate">multi-flag</text>
+        </g>
+      </svg>
+      <div class="fa-q4" id="state-q4">
+        <span class="fa-q4-label">q4</span>
+        <span class="fa-q4-sub">final classification</span>
+      </div>
+    </div>
+
+    <div class="fa-tape-wrap">
+      <span class="fa-tape-caption">Input tape</span>
+      <div class="fa-tape" id="faTape"></div>
+    </div>
+
+    <div class="fa-legend">
+      <div class="legend-item"><span class="legend-dot legend-normal"></span> Normal state — character accepted, no suspicious signal</div>
+      <div class="legend-item"><span class="legend-dot legend-suspicious"></span> Suspicious state — transition triggered by a flagged pattern</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ AI RISK ANALYSIS ============ -->
+<section class="section" id="risk">
+  <div class="section-inner">
+    <div class="section-head">
+      <span class="eyebrow">04 · Risk Scoring</span>
+      <h2>AI-Based Risk Analysis</h2>
+      <p>A rule-based scoring layer simulates AI classification by weighting each extracted feature.</p>
+    </div>
+
+    <div class="risk-panel">
+      <div class="risk-gauge-wrap">
+        <svg class="risk-gauge" viewBox="0 0 200 120">
+          <path class="gauge-track" d="M 20 110 A 80 80 0 0 1 180 110" />
+          <path class="gauge-fill" id="gaugeFill" d="M 20 110 A 80 80 0 0 1 180 110" />
+        </svg>
+        <div class="gauge-readout">
+          <span class="gauge-value" id="riskScoreValue">--</span>
+          <span class="gauge-unit">% RISK</span>
+        </div>
+      </div>
+      <div class="risk-details">
+        <div class="risk-classification" id="riskClassification">Awaiting analysis…</div>
+        <ul class="risk-factors" id="riskFactors"></ul>
+        <p class="risk-note">This is a demonstration/simulation of AI-based risk analysis using a fixed rule-weighted formula — not a trained machine-learning model.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FINAL RESULT ============ -->
+<section class="section section-alt" id="result">
+  <div class="section-inner">
+    <div class="section-head">
+      <span class="eyebrow">05 · Verdict</span>
+      <h2>Final Result</h2>
+    </div>
+    <div class="result-card" id="resultCard">
+      <div class="result-icon" id="resultIcon">◇</div>
+      <div class="result-verdict" id="resultVerdict">Run an analysis to see a verdict</div>
+      <div class="result-meta">
+        <div class="result-row"><span>Risk Level</span><strong id="resultRiskLevel">—</strong></div>
+        <div class="result-row"><span>Finite Automata Result</span><strong id="resultFaResult">—</strong></div>
+        <div class="result-row"><span>AI Risk Score</span><strong id="resultRiskScore">—</strong></div>
+      </div>
+      <div class="result-recommendation" id="resultRecommendation"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HOW IT WORKS ============ -->
+<section class="section" id="how-it-works">
+  <div class="section-inner">
+    <div class="section-head">
+      <span class="eyebrow">Workflow</span>
+      <h2>How It Works</h2>
+    </div>
+    <div class="flow">
+      <div class="flow-step">
+        <span class="flow-num">01</span>
+        <h3>URL Input</h3>
+        <p>User enters a URL into the analyzer.</p>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step">
+        <span class="flow-num">02</span>
+        <h3>Feature Extraction</h3>
+        <p>The system extracts URL characteristics — length, symbols, domain, keywords.</p>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step">
+        <span class="flow-num">03</span>
+        <h3>Finite Automata</h3>
+        <p>The automaton processes the URL and checks predefined suspicious patterns.</p>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step">
+        <span class="flow-num">04</span>
+        <h3>AI Risk Analysis</h3>
+        <p>The extracted features are evaluated to calculate a weighted risk score.</p>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step">
+        <span class="flow-num">05</span>
+        <h3>Final Classification</h3>
+        <p>The URL is classified as <strong>Legitimate</strong> or <strong>Potential Phishing</strong>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ABOUT FINITE AUTOMATA ============ -->
+<section class="section section-alt" id="about">
+  <div class="section-inner two-col">
+    <div class="about-text">
+      <span class="eyebrow">Theory</span>
+      <h2>What is Finite Automata?</h2>
+      <p>A finite automaton is a mathematical model consisting of a finite number of states and transitions. It processes an input string, one symbol at a time, and determines whether the string satisfies a defined pattern — accepting or rejecting it based on the state it ends in.</p>
+      <p>In this project, URLs are treated as input strings. The finite automaton scans URL patterns and changes states when suspicious patterns are encountered, moving progressively from a start state toward a final classification state.</p>
+    </div>
+    <div class="about-diagram">
+      <div class="mini-flow">
+        <span class="mini-node">START</span>
+        <span class="mini-arrow">→</span>
+        <span class="mini-node">URL PROCESSING</span>
+        <span class="mini-arrow">→</span>
+        <span class="mini-node">PATTERN CHECK</span>
+        <span class="mini-arrow">→</span>
+        <span class="mini-node mini-node-branch">SUSPICIOUS / SAFE</span>
+        <span class="mini-arrow">→</span>
+        <span class="mini-node mini-node-final">FINAL STATE</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DETECTION EXAMPLES ============ -->
+<section class="section" id="examples">
+  <div class="section-inner">
+    <div class="section-head">
+      <span class="eyebrow">Reference Set</span>
+      <h2>Detection Examples</h2>
+      <p>Click any row to load it into the analyzer above.</p>
+    </div>
+    <div class="table-wrap">
+      <table class="examples-table" id="examplesTable">
+        <thead>
+          <tr>
+            <th>URL</th>
+            <th>Automata Result</th>
+            <th>Risk Score</th>
+            <th>Final Result</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- rows injected by script.js -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER / DISCLAIMER ============ -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="disclaimer">
+      <strong>Academic Demonstration:</strong> This website is developed for educational purposes to demonstrate phishing URL pattern recognition using Finite Automata and a simulated AI-based risk analysis approach. It should not be considered a replacement for professional cybersecurity tools.
+    </div>
+    <div class="footer-meta">
+      <span>CSA1407 · Theory of Computation — Academic Project</span>
+      <span>Built with HTML · CSS · JavaScript — no backend, no database</span>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
